@@ -25,9 +25,7 @@ public class IHMVoiture extends JFrame implements Observer{
 	private void initGraphique() {
 		this.setTitle("Simulateur de Voiture");
 		this.setSize(505, 505);
-
 		this.maCommandeVoiture = new CommandeVoiture(this, maVoiture);
-
 		this.setVisible(true);
 	}
 	
@@ -61,7 +59,7 @@ public class IHMVoiture extends JFrame implements Observer{
 		contexteGraphique.setColor(Color.red);
 		dessinerVoiture(contexteGraphique);
         contexteGraphique.setColor(Color.black);
-        dessinerRoute(contexteGraphique);
+        //dessinerRoute(contexteGraphique);
     }
 
     private void dessinerRoute(Graphics contexteGraphique) {
@@ -71,23 +69,32 @@ public class IHMVoiture extends JFrame implements Observer{
 
 
     private void dessinerVoiture(Graphics contexteGraphique) {
+
 		int xMetres = maVoiture.getX();
+        int yMetres = maVoiture.getY();
 		int xPixel = calculerPositionPixels(xMetres);
-        double angle = maVoiture.getDirection() * Math.PI / 180;
+        int yPixel = calculerPositionPixels(yMetres);
+        int[] x = new int[3];
+        int[] y = new int[3];
+        int startX = xPixel;
+        int startY = yPixel;
+        int endX = (int) (startX + 30 * Math.cos(Math.toRadians(maVoiture.getDirection())));
+        int endY = (int) (startY + 30 * Math.sin(Math.toRadians(maVoiture.getDirection())));;
 
-        int x1, x2, y1, y2;
-        x1 = maVoiture.getX();
-        y1 = maVoiture.getY();
+        int deltaX =  (startY - endY) / 2;
+        int deltaY =  (endX - startX) / 2;
 
-        if (angle == 0.0) {
-            x2 = x1 + 30;
-            y2 = y1 + 30;
-        } else {
-            x2 = (int) (x1 + 30 * Math.sin(angle));
-            y2 = (int) (y1 + 30 * Math.cos(angle));
-        }
+        x[0] = endX;
+        y[0] = endY;
 
-		contexteGraphique.drawLine(x1, y1, x2, y2);
-	}
+        x[1] = startX - deltaX;
+        y[1] = startY - deltaY;
+
+        x[2] = startX + deltaX;
+        y[2] = startY + deltaY;
+
+        contexteGraphique.setColor(Color.RED);
+        contexteGraphique.fillPolygon(x, y, 3);
+    }
 	
 }

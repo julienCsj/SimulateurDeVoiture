@@ -9,11 +9,11 @@ public class Voiture extends Observable {
 	private int vitesseMetreSeconde;
 	private int directionEnDegres;
 
-	public Voiture(int x, int y, int vitesse) {
+	public Voiture(int x, int y, int vitesse, int direction) {
 		this.x = x;
 		this.y = y;
 		this.vitesseMetreSeconde = vitesse;
-		this.directionEnDegres = 0;
+        this.directionEnDegres = direction;
 	}
 
 	public void miseAJourPosition() {
@@ -23,24 +23,22 @@ public class Voiture extends Observable {
 
 	private void miseAJourPositionX() {
 
-
-		if(directionEnDegres > 0 && directionEnDegres < 180) {
-            y+= vitesseMetreSeconde;
+        if(directionEnDegres > 0 && directionEnDegres < 180) {
+            y+= vitesseMetreSeconde * Math.sin(Math.toRadians(getDirection()));
         }
 
         if(directionEnDegres > 90 && directionEnDegres < 270) {
-            x-= vitesseMetreSeconde;
+            x+= vitesseMetreSeconde * Math.cos(Math.toRadians(getDirection()));;
         }
 
         if((directionEnDegres > 270 && directionEnDegres <= 359)
-        || (directionEnDegres < 90 && directionEnDegres >= 0)) {
-            x+=vitesseMetreSeconde;
+                || (directionEnDegres < 90 && directionEnDegres >= 0)) {
+            x+=vitesseMetreSeconde * Math.cos(Math.toRadians(getDirection()));;
         }
 
         if(directionEnDegres > 180 && directionEnDegres <= 359) {
-            y-= vitesseMetreSeconde;
+            y+= vitesseMetreSeconde * Math.sin(Math.toRadians(getDirection()));;
         }
-
 
 		if (x > 1000)
 			x = 1000;
@@ -56,13 +54,16 @@ public class Voiture extends Observable {
 	public int getX() {
 		return x;
 	}
+    public int getY() {
+        return y;
+    }
 
-	public void accelerer() {
+    public void accelerer() {
 		if (vitesseMetreSeconde < 100)
 			vitesseMetreSeconde += 10;	
 	}
 
-	public Object getVitesse() {
+	public int getVitesse() {
 		return vitesseMetreSeconde;
 	}
 
@@ -82,19 +83,15 @@ public class Voiture extends Observable {
 	}
 
     public void tournerGauche() {
-        setDirection((directionEnDegres+10)%360);
+        setDirection((directionEnDegres+360-10)%360);
     }
 
     public void tournerDroite() {
-        setDirection((directionEnDegres+360-10)%360);
-
+        setDirection((directionEnDegres+10)%360);
     }
 
 	public int getDirection() {
 	return directionEnDegres;
 	}
 
-    public int getY() {
-        return y;
-    }
 }
