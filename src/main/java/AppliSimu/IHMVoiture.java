@@ -25,9 +25,7 @@ public class IHMVoiture extends JFrame implements Observer{
 	private void initGraphique() {
 		this.setTitle("Simulateur de Voiture");
 		this.setSize(505, 505);
-
 		this.maCommandeVoiture = new CommandeVoiture(this, maVoiture);
-
 		this.setVisible(true);
 	}
 	
@@ -55,16 +53,48 @@ public class IHMVoiture extends JFrame implements Observer{
 
 	@Override
 	public void paint(Graphics contexteGraphique) {
+        int xMetres = maVoiture.getX();
+        int xPixel = calculerPositionPixels(xMetres);
 		super.paint(contexteGraphique);
 		contexteGraphique.setColor(Color.red);
 		dessinerVoiture(contexteGraphique);
-	}
+        contexteGraphique.setColor(Color.black);
+        //dessinerRoute(contexteGraphique);
+    }
+
+    private void dessinerRoute(Graphics contexteGraphique) {
+        contexteGraphique.drawRect(0, 300-15, (int) this.getSize().getWidth(), 30);
+        contexteGraphique.drawRect((int) ((this.getSize().getWidth()/2)-15), 0, 30, (int) this.getSize().getHeight());
+    }
 
 
-	private void dessinerVoiture(Graphics contexteGraphique) {
+    private void dessinerVoiture(Graphics contexteGraphique) {
+
 		int xMetres = maVoiture.getX();
+        int yMetres = maVoiture.getY();
 		int xPixel = calculerPositionPixels(xMetres);
-		contexteGraphique.fillRect(xPixel, 300, 30, 15);
-	}
+        int yPixel = calculerPositionPixels(yMetres);
+        int[] x = new int[3];
+        int[] y = new int[3];
+        int startX = xPixel;
+        int startY = yPixel;
+        int endX = (int) (startX + 30 * Math.cos(Math.toRadians(maVoiture.getDirection())));
+        int endY = (int) (startY + 30 * Math.sin(Math.toRadians(maVoiture.getDirection())));;
+
+        int deltaX =  (startY - endY) / 2;
+        int deltaY =  (endX - startX) / 2;
+
+        x[0] = endX;
+        y[0] = endY;
+
+        x[1] = startX - deltaX;
+        y[1] = startY - deltaY;
+
+        x[2] = startX + deltaX;
+        y[2] = startY + deltaY;
+
+        contexteGraphique.setColor(Color.RED);
+        contexteGraphique.fillPolygon(x, y, 3);
+    }
 	
 }

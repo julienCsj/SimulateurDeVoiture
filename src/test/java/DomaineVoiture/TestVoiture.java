@@ -12,7 +12,7 @@ public class TestVoiture {
 	
 	@Before
 	public void setUp(){
-		maVoiture = new Voiture (100, 0, 10);
+		maVoiture = new Voiture (100, 0, 10, 0);
 	}
 	
 	@Test
@@ -77,5 +77,43 @@ public class TestVoiture {
 		assertEquals(0, maVoiture.getX());
 		
 	}
-	
+
+    @Test
+    public void testBase2D() {
+
+        assertEquals(0, maVoiture.getDirection());
+
+    }
+
+    @Test
+    public void testTournerDroite() {
+
+        maVoiture.tournerDroite();
+        assertEquals(10, maVoiture.getDirection());
+
+    }
+
+    @Test
+    public void testTournerGauche() {
+        maVoiture.tournerGauche();
+        assertEquals(350, maVoiture.getDirection());
+    }
+
+    @Test
+    public void testAvancerAngle() {
+        maVoiture.setDirection(30);
+        int x = (int) (maVoiture.getVitesse() * Math.cos(Math.PI/6));
+        int y = (int) (maVoiture.getVitesse() * Math.sin(Math.PI/6));
+        x+=maVoiture.getX();
+        y+=maVoiture.getY();
+        maVoiture.miseAJourPosition();
+        assertEquals(x, maVoiture.getX());
+        assertEquals(y, maVoiture.getY());
+    }
+
+    @Test
+    public void coordinatesToTriangle() {
+       assertTrue(true);
+
+    }
 }
