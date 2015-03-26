@@ -14,7 +14,9 @@ public class CommandeVoiture extends JPanel implements ActionListener{
 	
 	private JButton boutonAccelerer;
 	private JButton boutonInverserDirection;
-	private Voiture maVoiture;
+    private JButton boutonDroite;
+    private JButton boutonGauche;
+    private Voiture maVoiture;
 	
 	
 	public CommandeVoiture (JFrame fenetre, Voiture maVoiture) {
@@ -29,7 +31,15 @@ public class CommandeVoiture extends JPanel implements ActionListener{
 		boutonInverserDirection = new JButton("Changer direction");
 		boutonInverserDirection.addActionListener(this);
 		this.add(boutonInverserDirection);
-		
+
+        boutonDroite = new JButton("Tourner droite");
+        boutonDroite.addActionListener(this);
+        this.add(boutonDroite);
+
+        boutonGauche = new JButton("Tourner gauche");
+        boutonGauche.addActionListener(this);
+        this.add(boutonGauche);
+
 		fenetre.add(this);
 		this.maVoiture = maVoiture;
 	}
@@ -37,11 +47,16 @@ public class CommandeVoiture extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Object bouton = event.getSource();
-		if (bouton == boutonAccelerer)
-			maVoiture.accelerer();
-		else
-			maVoiture.inverserDirection();
+        Object bouton = event.getSource();
+        if (bouton == boutonAccelerer) {
+            maVoiture.accelerer();
+        } else if(bouton == boutonDroite) {
+            maVoiture.tournerDroite();
+        } else if(bouton == boutonGauche) {
+            maVoiture.tournerGauche();
+        } else {
+            maVoiture.inverserDirection();
+        }
 	}
 	
 

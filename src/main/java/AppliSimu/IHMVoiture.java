@@ -55,16 +55,39 @@ public class IHMVoiture extends JFrame implements Observer{
 
 	@Override
 	public void paint(Graphics contexteGraphique) {
+        int xMetres = maVoiture.getX();
+        int xPixel = calculerPositionPixels(xMetres);
 		super.paint(contexteGraphique);
 		contexteGraphique.setColor(Color.red);
 		dessinerVoiture(contexteGraphique);
-	}
+        contexteGraphique.setColor(Color.black);
+        dessinerRoute(contexteGraphique);
+    }
+
+    private void dessinerRoute(Graphics contexteGraphique) {
+        contexteGraphique.drawRect(0, 300-15, (int) this.getSize().getWidth(), 30);
+        contexteGraphique.drawRect((int) ((this.getSize().getWidth()/2)-15), 0, 30, (int) this.getSize().getHeight());
+    }
 
 
-	private void dessinerVoiture(Graphics contexteGraphique) {
+    private void dessinerVoiture(Graphics contexteGraphique) {
 		int xMetres = maVoiture.getX();
 		int xPixel = calculerPositionPixels(xMetres);
-		contexteGraphique.fillRect(xPixel, 300, 30, 15);
+        double angle = maVoiture.getDirection() * Math.PI / 180;
+
+        int x1, x2, y1, y2;
+        x1 = maVoiture.getX();
+        y1 = maVoiture.getY();
+
+        if (angle == 0.0) {
+            x2 = x1 + 30;
+            y2 = y1 + 30;
+        } else {
+            x2 = (int) (x1 + 30 * Math.sin(angle));
+            y2 = (int) (y1 + 30 * Math.cos(angle));
+        }
+
+		contexteGraphique.drawLine(x1, y1, x2, y2);
 	}
 	
 }
